@@ -8,3 +8,8 @@ Starting point: a clean C++ executable that compiles and runs.
 Build the core Matrix data structure using std::vector<vector<double>>.
 Supports construction, get/set with bounds checking, and terminal printing.
 No math operations yet - data structure first, operations next.
+
+## Step 3 — Matrix math operations
+Added add, multiply, transpose, and scale to the Matrix class.
+All operations return new matrices (non-destructive) and validate dimensions.
+Matrix multiply was the key one — implemented the three-loop dot product.
