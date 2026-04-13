@@ -19,3 +19,9 @@ Implemented sigmoid and ReLU (and their derivatives) in activations.h.
 Activation functions are what give neural networks the ability to learn
 non-linear patterns — without them, stacking layers has no effect.
 Derivatives are needed for backpropagation in a later step.
+
+## Step 5 — Dense layer
+Built the DenseLayer class — the core building block of the network.
+Each layer holds a weight matrix and bias vector, initialized with Xavier initialization.
+Forward pass computes z = weights * input + bias, then applies the activation.
+Stores last_input and last_z during the forward pass — will be needed for backprop.
