@@ -13,3 +13,9 @@ No math operations yet - data structure first, operations next.
 Added add, multiply, transpose, and scale to the Matrix class.
 All operations return new matrices (non-destructive) and validate dimensions.
 Matrix multiply was the key one — implemented the three-loop dot product.
+
+## Step 4 — Activation functions
+Implemented sigmoid and ReLU (and their derivatives) in activations.h.
+Activation functions are what give neural networks the ability to learn
+non-linear patterns — without them, stacking layers has no effect.
+Derivatives are needed for backpropagation in a later step.

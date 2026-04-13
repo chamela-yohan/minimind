@@ -73,7 +73,7 @@ public:
     Matrix multiply(const Matrix &other)
     {
         if (cols != other.rows)
-            throw std::invalid_argument("Matrix add: size mismatch");
+            throw std::invalid_argument("Matrix multiply: incompatible dimensions");
 
         Matrix result(rows, other.cols);
 
