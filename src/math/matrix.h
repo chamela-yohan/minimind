@@ -63,7 +63,7 @@ public:
         {
             for (int j = 0; j < cols; j++)
             {
-                result.data[i][j] = result.data[i][j] + other.data[i][j];
+                result.data[i][j] = data[i][j] + other.data[i][j];
             }
         }
         return result;

@@ -2,6 +2,7 @@
 #include <iomanip>
 #include "src/math/matrix.h"
 #include "src/math/activations.h"
+#include "src/network/layer.h"
 
 using namespace std;
 
@@ -10,36 +11,30 @@ int main()
     std::cout << "MiniMind — Activation Functions Test\n\n";
     std::cout << std::fixed << std::setprecision(4);
 
-    // Test scalar functions
-    std::cout << "Sigmoid on scalars:\n";
-    std::cout << "  sigmoid(-5) = " << sigmoid(-5) << "\n";
-    std::cout << "  sigmoid( 0) = " << sigmoid(0) << "\n";
-    std::cout << "  sigmoid( 5) = " << sigmoid(5) << "\n";
+     // Create a layer: 2 inputs, 3 outputs, sigmoid activation
+    DenseLayer layer(2, 3, Activation::SIGMOID);
+    layer.print_info("Hidden layer");
 
-    std::cout << "\nReLU on scalars:\n";
-    std::cout << "  relu(-3) = " << relu(-3) << "\n";
-    std::cout << "  relu( 0) = " << relu(0) << "\n";
-    std::cout << "  relu( 4) = " << relu(4) << "\n";
+    // Create a (2x1) input — column vector
+    Matrix input(2, 1);
+    input.set(0, 0, 1.0);   // first input
+    input.set(1, 0, 0.0);   // second input
+    input.print("\nInput [1, 0]");
 
-    // Test on a matrix
-    // Like a raw output of a layer before activation
-    Matrix raw(2, 3);
-    raw.set(0, 0, -2.0);
-    raw.set(0, 1, 0.5);
-    raw.set(0, 2, 1.5);
-    raw.set(1, 0, 3.0);
-    raw.set(1, 1, -0.5);
-    raw.set(1, 2, -1.5);
+    // Run the forward pass
+    Matrix output = layer.forward(input);
+    output.print("\nLayer output (after sigmoid)");
 
-    raw.print("\nRaw layer output");
-    apply_sigmoid(raw).print("\nAfter sigmoid");
-    apply_relu(raw).print("\nAfter ReLU");
+    // Show what was stored internally
+    layer.last_z.print("\nStored z (before activation)");
+    layer.last_input.print("Stored input");
 
-    // Derivative check
-    // sigmoid'(0.5) should be 0.5 * (1 - 0.5) = 0.25
-    std::cout << "\nDerivative check:\n";
-    std::cout << "  sigmoid_derivative(0.5) = "
-              << sigmoid_derivative(0.5) << " (expect 0.25)\n";
-
+    // Try a second input
+    std::cout << "\n--- Second input [0, 1] ---\n";
+    Matrix input2(2, 1);
+    input2.set(0, 0, 0.0);
+    input2.set(1, 0, 1.0);
+    layer.forward(input2).print("Output");
+    
     return 0;
 }
