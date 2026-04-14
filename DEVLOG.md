@@ -25,3 +25,10 @@ Built the DenseLayer class — the core building block of the network.
 Each layer holds a weight matrix and bias vector, initialized with Xavier initialization.
 Forward pass computes z = weights * input + bias, then applies the activation.
 Stores last_input and last_z during the forward pass — will be needed for backprop.
+
+## Step 6 — Network class
+Built the Network class that chains multiple DenseLayer objects together.
+forward() passes data through every layer in sequence — output of one
+becomes input of the next. Wired up the full XOR architecture:
+2 inputs → 4 hidden (ReLU) → 1 output (Sigmoid).
+Predictions are random noise for now — training comes next.

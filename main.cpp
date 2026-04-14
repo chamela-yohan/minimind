@@ -3,6 +3,7 @@
 #include "src/math/matrix.h"
 #include "src/math/activations.h"
 #include "src/network/layer.h"
+#include "src/network/network.h"
 
 using namespace std;
 
@@ -11,30 +12,42 @@ int main()
     std::cout << "MiniMind — Activation Functions Test\n\n";
     std::cout << std::fixed << std::setprecision(4);
 
-     // Create a layer: 2 inputs, 3 outputs, sigmoid activation
-    DenseLayer layer(2, 3, Activation::SIGMOID);
-    layer.print_info("Hidden layer");
+     // Build the XOR network
+    Network net;
+    net.add_layer(2, 4, Activation::RELU);      // hidden layer
+    net.add_layer(4, 1, Activation::SIGMOID);   // output layer
+    net.print_info();
 
-    // Create a (2x1) input — column vector
-    Matrix input(2, 1);
-    input.set(0, 0, 1.0);   // first input
-    input.set(1, 0, 0.0);   // second input
-    input.print("\nInput [1, 0]");
+    // The four XOR inputs
+    // XOR truth table:
+    //   [0,0] -> 0
+    //   [0,1] -> 1
+    //   [1,0] -> 1
+    //   [1,1] -> 0
+    double inputs[4][2] = {{0,0}, {0,1}, {1,0}, {1,1}};
+    double targets[4]   = {0, 1, 1, 0};
 
-    // Run the forward pass
-    Matrix output = layer.forward(input);
-    output.print("\nLayer output (after sigmoid)");
+    std::cout << "\nForward pass (untrained — random predictions):\n";
+    std::cout << "  Input             Expected           Predicted\n";
+    std::cout << "  ------------------------------------------------\n";
 
-    // Show what was stored internally
-    layer.last_z.print("\nStored z (before activation)");
-    layer.last_input.print("Stored input");
+    for (int i = 0; i < 4; i++) {
+        // Build input column vector (2x1)
+        Matrix input(2, 1);
+        input.set(0, 0, inputs[i][0]);
+        input.set(1, 0, inputs[i][1]);
 
-    // Try a second input
-    std::cout << "\n--- Second input [0, 1] ---\n";
-    Matrix input2(2, 1);
-    input2.set(0, 0, 0.0);
-    input2.set(1, 0, 1.0);
-    layer.forward(input2).print("Output");
+        // Run through network
+        Matrix output = net.forward(input);
+        double predicted = output.get(0, 0);
+
+        std::cout << "  [" << inputs[i][0] << ", " << inputs[i][1] << "]"
+                  << "    " << targets[i]
+                  << "          " << predicted << "\n";
+    }
+
+    std::cout << "\nPredictions are random — network is untrained.\n";
+    std::cout << "After training (Step 8) these should approach: 0, 1, 1, 0\n";
     
     return 0;
 }
