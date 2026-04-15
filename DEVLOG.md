@@ -32,3 +32,9 @@ forward() passes data through every layer in sequence — output of one
 becomes input of the next. Wired up the full XOR architecture:
 2 inputs → 4 hidden (ReLU) → 1 output (Sigmoid).
 Predictions are random noise for now — training comes next.
+
+## Step 7 — Loss function
+Implemented MSE (Mean Squared Error) loss and its derivative in a static utility class.
+Loss measures how wrong the network is — 0.0 is perfect, ~0.25 is random guessing.
+The derivative tells backprop which direction to nudge the output to reduce error.
+Untrained XOR network scores ~0.25 loss. Goal after training: below 0.01.
