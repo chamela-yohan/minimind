@@ -105,4 +105,18 @@ public:
 
         return result;
     }
+
+    // Element-wise multiply (Hadamard product)
+    // Multiplies corresponding elements — matrices must be same shape
+    // Different from dot product multiply — used in backpropagation
+    Matrix element_multiply(const Matrix& other) const {
+        if (rows != other.rows || cols != other.cols)
+            throw std::invalid_argument("Matrix element_multiply: size mismatch");
+
+        Matrix result(rows, cols);
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                result.data[i][j] = data[i][j] * other.data[i][j];
+        return result;
+    }
 };

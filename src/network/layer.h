@@ -67,18 +67,57 @@ public:
         bias.print("  Bias");
     }
 
+    // --- Backward pass ---
+    // Receives the gradient flowing in from the layer ahead of us
+    // Returns the gradient to pass back to the layer behind us
+    Matrix backward(const Matrix &output_gradient, double learning_rate)
+    {
+
+        // Step 1: compute activation derivative at the stored raw output
+       Matrix activation_grad(output_size, 1);
+        if (activation == Activation::SIGMOID) {
+            // sigmoid_derivative expects the ACTIVATED output, not raw z
+            // so we apply sigmoid to last_z first, then compute derivative
+            Matrix sig_output = apply_sigmoid(last_z);
+            activation_grad = apply_sigmoid_derivative(sig_output);
+        } else {
+            // relu_derivative just checks sign of z — raw value is correct here
+            activation_grad = apply_relu_derivative(last_z);
+        }
+
+        // Step 2: delta — how much did this layer's raw output affect the loss?
+        // Hadamard product: combine incoming error with local activation slope
+        Matrix delta = output_gradient.element_multiply(activation_grad);
+
+        // Step 3: compute gradients for weights and biases
+        Matrix weight_grad = delta.multiply(last_input.transpose());
+        Matrix bias_grad = delta;
+
+        // Step 4: compute gradient to pass back to the previous layer
+        Matrix input_gradient = weights.transpose().multiply(delta);
+
+        // Step 5: update weights and biases (gradient descent)
+        weights = weights.add(weight_grad.scale(-learning_rate));
+        bias = bias.add(bias_grad.scale(-learning_rate));
+
+        return input_gradient;
+    }
+
 private:
     // Weight initialization
+private:
     void init_weights()
     {
-       double range = std::sqrt(1.0 / input_size);
-
-        std::mt19937 rng(42);  // 42 = fixed seed, same result every run
-        std::uniform_real_distribution<double> dist(-range, range);
+        // Static counter — increments each time a layer is created
+        // Ensures every layer gets unique random weights
+        static int seed_counter = 0;
+        std::mt19937 rng(42 + seed_counter++);
+        std::uniform_real_distribution<double> dist(
+            -std::sqrt(1.0 / input_size),
+            std::sqrt(1.0 / input_size));
 
         for (int i = 0; i < weights.rows; i++)
             for (int j = 0; j < weights.cols; j++)
                 weights.data[i][j] = dist(rng);
-
     }
 };

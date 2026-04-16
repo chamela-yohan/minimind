@@ -38,3 +38,10 @@ Implemented MSE (Mean Squared Error) loss and its derivative in a static utility
 Loss measures how wrong the network is — 0.0 is perfect, ~0.25 is random guessing.
 The derivative tells backprop which direction to nudge the output to reduce error.
 Untrained XOR network scores ~0.25 loss. Goal after training: below 0.01.
+
+## Step 8 — Backpropagation and training (debugging)
+Hit two bugs: sigmoid_derivative was receiving raw z instead of activated output,
+and ReLU caused dying neurons on the small XOR dataset.
+Fixed by passing sigmoid(z) into the derivative, and switching hidden layer to sigmoid.
+Final result: loss 0.27 → 0.004 over 5000 epochs. All four XOR predictions correct.
+ReLU remains implemented for larger problems where it outperforms sigmoid.
