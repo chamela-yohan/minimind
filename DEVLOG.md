@@ -52,3 +52,9 @@ to a .bin file using raw byte I/O with reinterpret_cast.
 A fresh untrained network loaded with saved weights predicts identically
 to the original trained network — lossless round trip confirmed.
 Added .gitignore to exclude generated binaries from version control.
+
+## Step 10 — Project complete
+Polished README with full architecture documentation and build instructions.
+Published to LinkedIn. Project represents a complete ML engine built from
+scratch: matrix math → activations → layers → training → serialization.
+Total: 10 steps, zero external dependencies, one working neural network.
