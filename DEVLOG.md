@@ -45,3 +45,10 @@ and ReLU caused dying neurons on the small XOR dataset.
 Fixed by passing sigmoid(z) into the derivative, and switching hidden layer to sigmoid.
 Final result: loss 0.27 → 0.004 over 5000 epochs. All four XOR predictions correct.
 ReLU remains implemented for larger problems where it outperforms sigmoid.
+
+## Step 9 — Weight serialization
+Built a binary serializer that saves and loads all network weights and biases
+to a .bin file using raw byte I/O with reinterpret_cast.
+A fresh untrained network loaded with saved weights predicts identically
+to the original trained network — lossless round trip confirmed.
+Added .gitignore to exclude generated binaries from version control.
